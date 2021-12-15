@@ -73,6 +73,7 @@ public class ClientHandler implements Runnable {
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
 		broadcastMessage("SERVER: " + clientUsername + " has left the chat!");
+		broadcastMessage("SERVER: " + clientHandlers.size() + " people left in the chat.");
 	}
 	
 	/**
@@ -81,14 +82,14 @@ public class ClientHandler implements Runnable {
 	 * @param reader
 	 * @param writer
 	 */
-	private void closeEverything(Socket socket, BufferedReader reader, BufferedWriter writer) {
+	private void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
 		removeClientHandler();
 		try {
 			if (bufferedReader != null){
-				reader.close();
+				bufferedReader.close();
 			}
 			if (bufferedWriter != null){
-				writer.close();
+				bufferedWriter.close();
 			}
 			if (socket != null){
 				socket.close();
@@ -97,5 +98,4 @@ public class ClientHandler implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
 }

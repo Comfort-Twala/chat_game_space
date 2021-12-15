@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -89,5 +90,14 @@ public class Client {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void main(String[] args) throws UnknownHostException, IOException {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter your username: ");
+		Socket socket = new Socket("localhost", 1234);
+		Client client = new Client(socket, scanner.nextLine());
+		client.listenForMessage();
+		client.sendMessage();
 	}
 }
