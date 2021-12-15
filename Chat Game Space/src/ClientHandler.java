@@ -54,7 +54,25 @@ public class ClientHandler implements Runnable {
 	 * @param messageToSend
 	 */
 	private void broadcastMessage(String messageToSend) {
-		
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				if (!clientHandler.clientUsername.equals(clientUsername)){
+					clientHandler.bufferedWriter.write(messageToSend);
+					clientHandler.bufferedWriter.newLine();
+					clientHandler.bufferedWriter.flush();
+				}
+			} catch (Exception e) {
+				closeEverything(socket, bufferedReader, bufferedWriter);
+			}
+		}		
+	}
+
+	/**
+	 * Method to remove current clientHandler from arrayList
+	 */
+	public void removeClientHandler() {
+		clientHandlers.remove(this);
+		broadcastMessage("SERVER: " + clientUsername + " has left the chat!");
 	}
 	
 	/**
@@ -64,7 +82,20 @@ public class ClientHandler implements Runnable {
 	 * @param writer
 	 */
 	private void closeEverything(Socket socket, BufferedReader reader, BufferedWriter writer) {
-	
+		removeClientHandler();
+		try {
+			if (bufferedReader != null){
+				reader.close();
+			}
+			if (bufferedWriter != null){
+				writer.close();
+			}
+			if (socket != null){
+				socket.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
