@@ -46,6 +46,7 @@ public class Client {
 				bufferedWriter.newLine();
 				bufferedWriter.flush();
 			}
+			scanner.close();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -108,6 +109,7 @@ public class Client {
 		System.out.println("Enter your username: ");
 		Socket socket = new Socket("localhost", 1234);
 		Client client = new Client(socket, scanner.nextLine());
+		scanner.close();
 		client.listenForMessage();
 		client.sendMessage();
 	}

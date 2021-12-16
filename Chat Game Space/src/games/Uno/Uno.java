@@ -12,14 +12,14 @@ import sockets.*;
 public class Uno extends Client {
 
 	private HashMap<String, ArrayList<Card>> players;
-	private Stack<Card> playedDeck;
+	// private Stack<Card> playedDeck;
 	private Stack<Card> deck;
 	private Setup game;
 
 	public Uno(Socket socket) {
 		super(socket, "UNO");
 		this.players = new HashMap<String, ArrayList<Card>>();
-		this.playedDeck = new Stack<Card>(); 
+		// this.playedDeck = new Stack<Card>(); 
 		this.game = new Setup();
 		this.deck = game.newDeck();
 	}
@@ -77,7 +77,7 @@ public class Uno extends Client {
 				}
 				break;
 			default:
-				Card card = players.get(player).get(Integer.valueOf(command.substring(1)));
+				// Card card = players.get(player).get(Integer.valueOf(command.substring(1)));
 				break;
 		}
 	}
