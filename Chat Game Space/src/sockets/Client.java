@@ -14,9 +14,9 @@ import java.util.Scanner;
  */
 public class Client {
 
-	private Socket socket;
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
+	public Socket socket;
+	public BufferedReader bufferedReader;
+	public BufferedWriter bufferedWriter;
 	private String username;
 
 	public Client(Socket socket, String username) {
@@ -63,13 +63,22 @@ public class Client {
 				while (socket.isConnected()) {
 					try {
 						msgFromGroupChat = bufferedReader.readLine();
-						System.out.println(msgFromGroupChat);
+						if (forAll(msgFromGroupChat) == true)
+							System.out.println(msgFromGroupChat);
 					} catch (IOException e) {
 						closeEverything(socket, bufferedReader, bufferedWriter);
 					}
 				}
 			}
 		}).start();
+	}
+
+	private boolean forAll(String msg) {
+		if (!msg.split(" ")[0].equals("UNO:"))
+			return true;
+		if (msg.split(" ")[1].equals(username + ":"))
+			System.out.println(msg);
+		return false;
 	}
 
 	/**
