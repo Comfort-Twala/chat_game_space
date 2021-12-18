@@ -1,18 +1,28 @@
 package games.Uno;
 
+/**
+ * Card class for Uno cards 
+ */
 public class Card {
 
 	private int number;
 	private Colour colour;
 	private Type type;
 
+	/**
+	 * Colour enum for the different Uno card colours
+	 */
 	public enum Colour {
 		RED,
 		GREEN,
 		YELLOW,
 		BLUE, 
 		NONE
-	};
+	}
+
+	/**
+	 * Type enum for the different Uno card types 
+	 */
 	public enum Type {
 		NONE,
 		DRAW_TWO,
@@ -22,12 +32,21 @@ public class Card {
 		WILD_DRAW_FOUR
 	}
 
+	/**
+	 * Card constructor to create Uno card
+	 * @param number
+	 * @param colour
+	 * @param type
+	 */
 	public Card(int number, Colour colour, Type type) {
 		this.number = number;
 		this.colour = colour;
 		this.type = type;
 	}
 
+	/**
+	 * String representation method for Uno Card
+	 */
 	public String toString() {
 		switch (this.type) {
 			case NONE:

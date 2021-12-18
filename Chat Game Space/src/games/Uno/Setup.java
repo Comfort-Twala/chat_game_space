@@ -7,11 +7,17 @@ import java.util.Stack;
 import games.Uno.Card.Colour;
 import games.Uno.Card.Type;
 
+/**
+ * Setup class to create playing cards and setup the game 
+ */
 public class Setup {
 	
 	private ArrayList<Card> cards;
 	private Stack<Card> deck;
 
+	/**
+	 * Constructor to setup game and create playing cards
+	 */
 	public Setup() {
 		this.deck = new Stack<Card>();
 		this.cards = new ArrayList<Card>();
@@ -125,12 +131,20 @@ public class Setup {
 		cards.add(new Card(14, Colour.NONE, Type.WILD_DRAW_FOUR));
 	}
 
+	/**
+	 * Method to create new shuffled deck of cards
+	 * @return deck
+	 */
 	public Stack<Card> newDeck(){
 		Collections.shuffle(cards);
 		deck.addAll(cards);
 		return deck;
 	}
 
+	/**
+	 * Method to deal cards to players
+	 * @return card hand for player
+	 */
 	public ArrayList<Card> dealCards() {
 		ArrayList<Card> hand = new ArrayList<Card>();
 		for (int i = 0; i < 7; i++) {

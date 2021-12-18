@@ -9,6 +9,9 @@ import java.util.Stack;
 
 import sockets.*;
 
+/**
+ * Main game class with game logic and mechanics which joins server as a Client
+ */
 public class Uno extends Client {
 
 	private HashMap<String, ArrayList<Card>> players;
@@ -16,6 +19,10 @@ public class Uno extends Client {
 	private Stack<Card> deck;
 	private Setup game;
 
+	/**
+	 * Constructor to Set up game and connect Uno class to server with socket
+	 * @param socket
+	 */
 	public Uno(Socket socket) {
 		super(socket, "UNO");
 		this.players = new HashMap<String, ArrayList<Card>>();
@@ -23,7 +30,10 @@ public class Uno extends Client {
 		this.game = new Setup();
 		this.deck = game.newDeck();
 	}
-	
+
+	/**
+	 * Overriden method to listen for messages from server and execute commands accordingly
+	 */
 	@Override
 	public void listenForMessage() {
 		new Thread(new Runnable() {
@@ -49,7 +59,13 @@ public class Uno extends Client {
 
 		}).start();
 	}
-	
+
+	/**
+	 * Method to execute player command and play the game
+	 * @param player
+	 * @param command
+	 * @throws IOException
+	 */
 	private void executeCommand(String player, String command) throws IOException {
 		switch (command) {
 			case "!join":
@@ -82,6 +98,11 @@ public class Uno extends Client {
 		}
 	}
 
+	/**
+	 * Method to update player on cards status and player specific updates
+	 * @param player
+	 * @throws IOException
+	 */
 	private void updatePlayer(String player) throws IOException{
 		bufferedWriter.write("UNO: " + player + ": ");
 		for (int card = 0; card < players.get(player).size(); card++){
