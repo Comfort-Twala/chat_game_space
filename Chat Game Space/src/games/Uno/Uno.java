@@ -106,7 +106,7 @@ public class Uno extends Client {
 	private void updatePlayer(String player) throws IOException{
 		bufferedWriter.write("UNO: " + player + ": ");
 		for (int card = 0; card < players.get(player).size(); card++){
-			bufferedWriter.write(card + ". " + players.get(player).get(card) + "\t");
+			bufferedWriter.write(players.get(player).get(card).toString());
 		}
 		bufferedWriter.newLine();
 		bufferedWriter.flush();
