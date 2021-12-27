@@ -73,6 +73,12 @@ public class Client {
 		}).start();
 	}
 
+	/**
+	 * Message to decide whether to show all clients the message or just a specific client.
+	 * 
+	 * @param msg
+	 * @return whether to send to all or not.
+	 */
 	private boolean forAll(String msg) {
 		if (msg == null) return true;
 		if (!msg.split(" ")[0].equals("UNO:"))
