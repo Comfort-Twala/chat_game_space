@@ -63,7 +63,7 @@ public class ClientHandler implements Runnable {
 					clientHandler.bufferedWriter.newLine();
 					clientHandler.bufferedWriter.flush();
 				}
-			} catch (Exception e) {
+			} catch (IOException e) {
 				closeEverything(socket, bufferedReader, bufferedWriter);
 			}
 		}		
@@ -85,6 +85,7 @@ public class ClientHandler implements Runnable {
 	 * @param writer
 	 */
 	private void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+		System.out.println("Closing...");
 		removeClientHandler();
 		try {
 			if (bufferedReader != null){
@@ -96,7 +97,7 @@ public class ClientHandler implements Runnable {
 			if (socket != null){
 				socket.close();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
