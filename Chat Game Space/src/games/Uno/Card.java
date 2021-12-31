@@ -10,7 +10,6 @@ public class Card {
 	private int number;
 	private Colour colour;
 	private Type type;
-	private String[] card;
 
 	/**
 	 * Colour enum for the different Uno card colours
@@ -45,7 +44,6 @@ public class Card {
 		this.number = number;
 		this.colour = colour;
 		this.type = type;
-		this.card = new String[6];
 	}
 
 	private String centerPad(String str, int totLength) {
@@ -65,41 +63,37 @@ public class Card {
 	 * String representation method for Uno Card
 	 */
 	public String toString() {
-		this.card[0] = "-----------";
-		this.card[1] = "|         |";
+		String result = "|";
 		switch (this.colour) {
 			case NONE:
-				this.card[2] = "|  WILD   |";
+				result += "Wild ";
 				switch (this.type) {
 					case WILD:
-						this.card[3] = "|  CARD   |";
+						result += "Card";
 						break;
 					case WILD_DRAW_FOUR:
-						this.card[3] = "|   +4    |";
+						result += "+4";
 						break;
 					default:
 						break;
 				}
 				break;
 			case RED:
-				this.card[2] = "|   RED   |";
+				result += "Red ";
 				break;
 			case BLUE:
-				this.card[2] = "|  BLUE   |";
+				result += "Blue ";
 				break;
 			case GREEN:
-				this.card[2] = "|  GREEN  |";
+				result += "Green ";
 				break;
 			case YELLOW:
-				this.card[2] = "|  YELLOW |";
+				result += "Yellow ";
 				break;
-			
 		}
 		if (this.colour != Colour.NONE)
-			this.card[3] = "|" + centerPad(Integer.toString(this.number), 9) + "|";
-		this.card[4] = "|         |";
-		this.card[5] = "-----------";
+			result += Integer.toString(this.number);
 
-		return Arrays.asList(card).toString();
+		return result;
 	}	
 }

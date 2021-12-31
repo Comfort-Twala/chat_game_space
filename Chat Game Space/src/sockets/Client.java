@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -83,8 +84,18 @@ public class Client {
 		if (msg == null) return true;
 		if (!msg.split(" ")[0].equals("UNO:"))
 			return true;
-		if (msg.split(" ")[1].equals(username + ":"))
-			System.out.println(msg);
+		if (msg.split(" ")[1].equals(username + ":")){
+			System.out.println("Your cards: ");
+			int index = 1;
+			String[] cards = msg.split("\\|");
+			for (String card : cards) {
+				if (card.startsWith("UNO"))
+					continue;
+				System.out.println("\t" + index + ". " + card);
+				index++;
+			}
+		}
+			
 		return false;
 	}
 
