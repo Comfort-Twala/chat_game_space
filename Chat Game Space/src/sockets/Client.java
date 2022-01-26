@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -66,7 +65,7 @@ public class Client {
 						msgFromGroupChat = bufferedReader.readLine();
 						if (forAll(msgFromGroupChat) == true)
 							System.out.println(msgFromGroupChat);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						closeEverything(socket, bufferedReader, bufferedWriter);
 					}
 				}

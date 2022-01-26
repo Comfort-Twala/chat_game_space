@@ -2,7 +2,6 @@ package sockets;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -27,7 +26,7 @@ public class ClientHandler implements Runnable {
 			this.clientUsername = bufferedReader.readLine();
 			clientHandlers.add(this);
 			broadcastMessage("SERVER: " + this.clientUsername + " has entered the chat!");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 	}
@@ -44,7 +43,7 @@ public class ClientHandler implements Runnable {
 			try {
 				messageFromClient = bufferedReader.readLine();
 				broadcastMessage(messageFromClient);
-			} catch (IOException e){
+			} catch (Exception e){
 				closeEverything(socket, bufferedReader, bufferedWriter);
 				break;
 			}
@@ -63,7 +62,7 @@ public class ClientHandler implements Runnable {
 					clientHandler.bufferedWriter.newLine();
 					clientHandler.bufferedWriter.flush();
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				closeEverything(socket, bufferedReader, bufferedWriter);
 			}
 		}		
@@ -97,7 +96,7 @@ public class ClientHandler implements Runnable {
 			if (socket != null){
 				socket.close();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
