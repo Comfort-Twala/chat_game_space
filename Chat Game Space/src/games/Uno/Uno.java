@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import sockets.*;
 
@@ -18,17 +20,27 @@ public class Uno extends Client {
 	// private Stack<Card> playedDeck;
 	private Stack<Card> deck;
 	private Setup game;
+	private boolean gameStarted;
 
 	/**
 	 * Constructor to Set up game and connect Uno class to server with socket
 	 * @param socket
+	 * @throws IOException
 	 */
-	public Uno(Socket socket) {
+	public Uno(Socket socket) throws IOException {
 		super(socket, "UNO");
 		this.players = new HashMap<String, ArrayList<Card>>();
 		// this.playedDeck = new Stack<Card>(); 
 		this.game = new Setup();
 		this.deck = game.newDeck();
+		this.gameStarted = false;
+		TimeUnit time = TimeUnit.MILLISECONDS;
+		try {
+			time.sleep(500L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.welcomeMessage();
 	}
 
 	/**
@@ -56,7 +68,6 @@ public class Uno extends Client {
 					}
 				}
 			}
-
 		}).start();
 	}
 
@@ -67,12 +78,16 @@ public class Uno extends Client {
 	 * @throws IOException
 	 */
 	private void executeCommand(String player, String command) throws IOException {
-		switch (command) {
-			case "!join":
+		if (command.equals("!join")){
+			if (this.gameStarted == true){
+				bufferedWriter.write("UNO: Game Already started... Wait for next game to join.");
+				bufferedWriter.newLine();
+				bufferedWriter.flush();
+			} else {
 				boolean new_player = true;
 				for (String p : players.keySet()) {
 					if (p.equals(player)){
-						bufferedWriter.write(player + " already in game");	
+						bufferedWriter.write("UNO: " + player + " already in game");	
 						bufferedWriter.newLine();
 						bufferedWriter.flush();
 						new_player = false;					
@@ -80,21 +95,64 @@ public class Uno extends Client {
 					}
 				}
 				if (new_player == true){
+					bufferedWriter.write("UNO: " + player + " has joined the game!");
+					bufferedWriter.newLine();
+					bufferedWriter.flush();
 					players.put(player, game.dealCards());
 					System.out.println("Players in game: ");
 					players.forEach((k,v) -> {System.out.println("\t" + k);});
 					updatePlayer(player);
 				}
-				break;
-			case "!draw":
-				if (players.containsKey(player)){
-					players.get(player).add(deck.pop());
-					updatePlayer(player);
+			}	
+		} else if (command.equals("!start")){
+			if (this.gameStarted == true){
+				bufferedWriter.write("UNO: Game Already started...");
+				bufferedWriter.newLine();
+				bufferedWriter.flush();
+			} else {
+				if (players.size() > 1){
+					this.gameStarted = true;
+					bufferedWriter.write("UNO: Starting Game...\n" + players.size() + " players in game.");
+					bufferedWriter.newLine();
+					bufferedWriter.flush();
+				} else {
+					bufferedWriter.write("UNO: Need 2 or more players to start game.");
+					bufferedWriter.newLine();
+					bufferedWriter.flush();
 				}
-				break;
-			default:
-				// Card card = players.get(player).get(Integer.valueOf(command.substring(1)));
-				break;
+			}
+		} else {
+			if (this.gameStarted == false){
+				bufferedWriter.write("UNO: Game not started... Enter \"!start\" to start game.");
+				bufferedWriter.newLine();
+				bufferedWriter.flush();
+			} else {			
+				switch (command) {
+					case "!draw":
+						bufferedWriter.write("UNO: " + player + " drew a card.");
+						bufferedWriter.newLine();
+						bufferedWriter.flush();
+						if (players.containsKey(player)){
+							players.get(player).add(deck.pop());
+							updatePlayer(player);
+						}
+						break;
+					case "!view":
+						updatePlayer(player);
+						break;
+					default:
+						if (command.startsWith("!play")){
+							System.out.println(Arrays.asList(command.split(" ")));
+							Card card = players.get(player).get(Integer.valueOf(command.split("-")[1])-1);
+							bufferedWriter.write("UNO: " + player + " played card - " + card.toString());
+							bufferedWriter.newLine();
+							bufferedWriter.flush();
+							players.get(player).remove(card);
+							updatePlayer(player);
+						}
+						break;
+				}
+			}
 		}
 	}
 
@@ -111,6 +169,16 @@ public class Uno extends Client {
 		bufferedWriter.newLine();
 		bufferedWriter.flush();
 	}
+	
+	/**
+	 * Joining instruction after UNO client joins server.
+	 * @throws IOException
+	 */
+	private void welcomeMessage() throws IOException {
+		bufferedWriter.write("UNO: Enter \"!join\" to join in UNO game then \"!start\" to start it.");
+		bufferedWriter.newLine();
+		bufferedWriter.flush();
+	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		Socket socket = new Socket("localhost", 1234);
@@ -118,4 +186,5 @@ public class Uno extends Client {
 		game.listenForMessage();
 		game.sendMessage();
 	}
+
 }
