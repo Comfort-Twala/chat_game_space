@@ -1,7 +1,5 @@
 package games.Uno;
 
-import java.util.Arrays;
-
 /**
  * Card class for Uno cards 
  */
@@ -46,6 +44,12 @@ public class Card {
 		this.type = type;
 	}
 
+	/**
+	 * Method to center text in middle of card
+	 * @param str
+	 * @param totLength
+	 * @return
+	 */
 	private String centerPad(String str, int totLength) {
 		int pad = (totLength - str.length()) / 2;
 		String result = "";
@@ -56,6 +60,32 @@ public class Card {
 		for (int i = 0; i < (totLength - pad - str.length()); i++) {
 			result += " ";
 		}
+		return result;
+	}
+
+	/**
+	 * Card like representation of card
+	 */
+	public String[] card(){
+		String[] result = new String[6];
+		result[0] = "----------";
+		result[1] = "|        |";
+
+		if (this.colour == this.colour.NONE){
+			result[2] = "|  WILD  |";
+		} else {
+			result[2] = "|" + centerPad(this.colour.toString(), 8) + "|";
+		} 
+		if (this.number > 12){
+			if (this.type == type.WILD){
+				result[3] = "|" + centerPad("CARD", 8) + "|";
+			} else {
+				result[3] = "|" + centerPad("+4", 8) + "|";
+			}
+		}
+		result[4] = "|		 |";
+		result[5] = "---------";
+
 		return result;
 	}
 
